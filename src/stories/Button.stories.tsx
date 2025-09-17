@@ -1,99 +1,72 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "../components/Button";
+import { Button, type ButtonProps } from "../components/atoms/Button";
 import { action } from "@storybook/addon-actions";
 
-const meta = {
-  title: "Components/Button",
+const meta: Meta<typeof Button> = {
+  title: "Atoms/Button",
   component: Button,
+  tags: ["autodocs"],
   parameters: {
     layout: "centered",
     docs: {
       description: {
         component:
-          "A flexible button component with multiple variants and sizes, built with Tailwind CSS.",
+          "Responsive button component supporting primary and outline variants with loading states.",
       },
     },
   },
-  tags: ["autodocs"],
   argTypes: {
-    variant: {
-      control: "radio",
-      options: ["primary", "secondary"],
-      description: "The visual style of the button",
-    },
     size: {
       control: "radio",
-      options: ["sm", "md", "lg"],
-      description: "The size of the button",
+      options: ["md", "lg"],
     },
-    children: {
-      control: "text",
-      description: "The content to display inside the button",
+    variant: {
+      control: "radio",
+      options: ["primary", "outline"],
     },
-    onClick: {
-      description: "Function called when the button is clicked",
+    loading: {
+      control: "boolean",
     },
+    fullWidth: {
+      control: "boolean",
+    },
+    onClick: { action: "clicked" },
   },
-} satisfies Meta<typeof Button>;
+  args: {
+    size: "md",
+    variant: "primary",
+    children: "Click me",
+    onClick: action("button-click"),
+  },
+};
 
 export default meta;
 type Story = StoryObj<typeof Button>;
 
-export const Primary: Story = {
+export const Default: Story = {};
+
+export const Loading: Story = {
   args: {
-    children: "Primary Button",
-    variant: "primary",
-    size: "md",
-    onClick: action("primary-clicked"),
+    loading: true,
+    children: "Loading",
   },
 };
 
-export const Secondary: Story = {
+export const Disabled: Story = {
   args: {
-    children: "Secondary Button",
-    variant: "secondary",
-    size: "md",
-    onClick: action("secondary-clicked"),
+    disabled: true,
+    children: "Disabled",
   },
 };
 
-export const Small: Story = {
+export const Outline: Story = {
   args: {
-    children: "Small Button",
-    variant: "primary",
-    size: "sm",
-    onClick: action("small-clicked"),
+    variant: "outline",
   },
 };
 
-export const Large: Story = {
+export const FullWidth: Story = {
   args: {
-    children: "Large Button",
-    variant: "primary",
-    size: "lg",
-    onClick: action("large-clicked"),
+    fullWidth: true,
   },
-};
-
-export const AllVariants: Story = {
-  render: () => (
-    <div className="flex gap-4 flex-wrap">
-      <Button variant="primary" size="md" onClick={action("primary-clicked")}>
-        Primary
-      </Button>
-      <Button
-        variant="secondary"
-        size="md"
-        onClick={action("secondary-clicked")}
-      >
-        Secondary
-      </Button>
-      <Button variant="primary" size="sm" onClick={action("small-clicked")}>
-        Small
-      </Button>
-      <Button variant="primary" size="lg" onClick={action("large-clicked")}>
-        Large
-      </Button>
-    </div>
-  ),
 };

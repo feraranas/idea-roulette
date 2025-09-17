@@ -1,81 +1,41 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import {
-  loggerLink,
-  unstable_httpBatchStreamLink,
-  createWSClient,
-  wsLink,
-  splitLink,
-} from "@trpc/client";
+import { httpBatchLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import { useState } from "react";
 import SuperJSON from "superjson";
 
 import { type AppRouter } from "@/lib/api/root";
-
-const createQueryClient = () => new QueryClient();
-
-let clientQueryClientSingleton: QueryClient | undefined = undefined;
-const getQueryClient = () => {
-  if (typeof window === "undefined") {
-    // Server: always make a new query client
-    return createQueryClient();
-  }
-  // Browser: use singleton pattern to keep the same query client
-  return (clientQueryClientSingleton ??= createQueryClient());
-};
+import { QueryClient } from "@tanstack/react-query";
 
 export const api = createTRPCReact<AppRouter>();
 
-// create persistent WebSocket connection
-const wsClient =
-  typeof window !== "undefined"
-    ? createWSClient({
-        url:
-          process.env.NODE_ENV === "development"
-            ? "ws://localhost:3001"
-            : `wss://${window.location.host}`,
-      })
-    : undefined;
+type TRPCProviderProps = {
+  children: React.ReactNode;
+  queryClient: QueryClient;
+};
 
-export function TRPCReactProvider(props: { children: React.ReactNode }) {
-  const queryClient = getQueryClient();
-
+export function TRPCReactProvider({ children, queryClient }: TRPCProviderProps) {
   const [trpcClient] = useState(() =>
     api.createClient({
       links: [
-        loggerLink({
-          enabled: (op) =>
-            process.env.NODE_ENV === "development" ||
-            (op.direction === "down" && op.result instanceof Error),
-        }),
-        splitLink({
-          condition: (op) => !!wsClient && op.type === "subscription",
-          true: wsLink({
-            client: wsClient!,
-            transformer: SuperJSON,
-          }),
-          false: unstable_httpBatchStreamLink({
-            transformer: SuperJSON,
-            url: getBaseUrl() + "/api/trpc",
-            headers: () => {
-              const headers = new Headers();
-              headers.set("x-trpc-source", "nextjs-react");
-              return headers;
-            },
-          }),
+        httpBatchLink({
+          url: `${getBaseUrl()}/api/trpc`,
+          transformer: SuperJSON,
+          headers: () => {
+            const headers = new Headers();
+            headers.set("x-trpc-source", "nextjs-react");
+            return headers;
+          },
         }),
       ],
     }),
   );
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <api.Provider client={trpcClient} queryClient={queryClient}>
-        {props.children}
-      </api.Provider>
-    </QueryClientProvider>
+    <api.Provider client={trpcClient} queryClient={queryClient}>
+      {children}
+    </api.Provider>
   );
 }
 

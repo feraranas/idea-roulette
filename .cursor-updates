@@ -6,3 +6,9 @@
 - Fixed dynamic route warning by adding force-dynamic config to root page
 - Added Storybook with Button component and stories, updated .cursorrules with Storybook guidelines
 - Captured screenshot of Button component stories in Storybook
+- Built idea roulette flow with atoms, organisms, tasklist API, and full Storybook coverage
+- Fixed runtime mutation error by restoring QueryClientProvider around TRPC provider and re-running build
+- Added inverted card tone for slot machine to fix white strip and verified build succeeds
+- Removed OpenAI temperature override so default-only models work and reran build
+- Wrapped tasklist OpenAI call in try/catch to surface TRPC errors cleanly and rebuilt
+- Improved tasklist router error messaging (API key hint, safe fallback) and reran build

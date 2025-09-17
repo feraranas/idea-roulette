@@ -1,0 +1,103 @@
+[
+  {
+    "title": "Micro-Grid Monitor",
+    "summary": "### Why it matters\nReal-time energy dashboards that help apartment buildings visualize micro-grid output, outages, and savings.",
+    "one_pager": "# Micro-Grid Monitor\n\n## Problem\nFacility managers lack a simple view of how their micro-grid performs compared to the main grid.\n\n## Solution\nDeliver a live dashboard with health indicators, outage alerts, and kWh savings for every building.\n\n## Demo Hooks\n- Animated gauge showing live load.\n- Snapshot cards for solar, storage, and drawdown.\n- CTA to download the sustainability report."
+  },
+  {
+    "title": "Remote Wardrobe Stylist",
+    "summary": "### Personal styling on demand\nUpload your closet, get AI-generated outfits for the week in minutes.",
+    "one_pager": "# Remote Wardrobe Stylist\n\n## Problem\nBusy professionals struggle to plan outfits that match meetings, weather, and style goals.\n\n## Solution\nOffer a concierge that mixes wardrobe uploads with AI suggestions, complete with shopping add-ons.\n\n## Demo Hooks\n- Avatar preview cycling through looks.\n- Highlighted schedule timeline with outfit cards.\n- Button to export outfits to calendar."
+  },
+  {
+    "title": "Civic Feedback Loop",
+    "summary": "### One tap to improve your city\nResidents submit street-level issues with guided prompts and see progress updates.",
+    "one_pager": "# Civic Feedback Loop\n\n## Problem\nCity feedback portals are overwhelming and non-transparent, lowering resident engagement.\n\n## Solution\nMobile-first interface that captures structured feedback, tags it, and shows a live status board.\n\n## Demo Hooks\n- Map pins updating as issues resolve.\n- Rolling feed of city responses.\n- CTA to submit a new report."
+  },
+  {
+    "title": "Neighborhood Pantry Hub",
+    "summary": "### Food access made local\nVolunteer-run pantries share live inventory, pickup slots, and donation needs.",
+    "one_pager": "# Neighborhood Pantry Hub\n\n## Problem\nCommunity pantries rely on spreadsheets that quickly fall out of sync with real inventory.\n\n## Solution\nProvide a real-time signal of stock levels, volunteer shifts, and urgent requests per pantry.\n\n## Demo Hooks\n- Inventory bars that change color as items run low.\n- Volunteer shift carousel.\n- Donate vs. pick-up call to action."
+  },
+  {
+    "title": "QuietCommute",
+    "summary": "### Silence-first ride matching\nBook rides that guarantee quiet zones, noise profiles, and gentle lighting.",
+    "one_pager": "# QuietCommute\n\n## Problem\nSensory-sensitive commuters avoid rideshares due to chatty drivers and harsh environments.\n\n## Solution\nMatch riders with quiet-friendly options, rating cabins on noise, scent, and brightness.\n\n## Demo Hooks\n- Animated comfort score dial.\n- Route preview comparing quiet options.\n- Subscription upsell banner."
+  },
+  {
+    "title": "Focus Bubble",
+    "summary": "### Shared deep work rooms\nReserve distraction-free virtual rooms with timed focus sessions and accountability partners.",
+    "one_pager": "# Focus Bubble\n\n## Problem\nRemote teams struggle to recreate shared focus time without coworkers around.\n\n## Solution\nHost structured focus rooms with countdown timers, rituals, and post-session reflections.\n\n## Demo Hooks\n- Timer ring that animates session stages.\n- Participant cards showing commitment streaks.\n- CTA to join the next bubble."
+  },
+  {
+    "title": "SkillSwap Studio",
+    "summary": "### Teach what you know\nNeighbors exchange micro-lessons, earning credits to unlock new skills.",
+    "one_pager": "# SkillSwap Studio\n\n## Problem\nLocal communities lack easy ways to trade skills without cash or long commitments.\n\n## Solution\nCreate a marketplace of 30-minute lessons with credit tracking and progress trails.\n\n## Demo Hooks\n- Skill carousel with category filters.\n- Credit balance meter reflecting swaps.\n- Scheduler to book upcoming swaps."
+  },
+  {
+    "title": "Garden Guardian",
+    "summary": "### Smart plant sentry\nSensors and AI assistant that coach urban gardeners through seasonal care.",
+    "one_pager": "# Garden Guardian\n\n## Problem\nUrban gardeners forget watering cycles and pest checks for balcony plants.\n\n## Solution\nCombine low-cost sensors with guided routines, alerts, and plant health insights.\n\n## Demo Hooks\n- Moisture trend graph toggling between plants.\n- Alert timeline with suggested actions.\n- CTA to add another planter."
+  },
+  {
+    "title": "MuseMap",
+    "summary": "### Discover creative spaces\nFind nearby studios, pop-ups, and residencies tailored to your craft.",
+    "one_pager": "# MuseMap\n\n## Problem\nArtists navigate fragmented directories when searching for spaces that fit their needs.\n\n## Solution\nCurate a map with filters for medium, budget, and availability, plus member reviews.\n\n## Demo Hooks\n- Map cluster animation as you zoom.\n- Spotlight cards with availability badges.\n- Apply for residency CTA."
+  },
+  {
+    "title": "Rapid Recipe Relay",
+    "summary": "### Team meal coordination\nCrowdsource weeknight recipes within friend groups, complete with auto-generated shopping lists.",
+    "one_pager": "# Rapid Recipe Relay\n\n## Problem\nCoordinating shared meals is chaotic when dietary needs and schedules conflict.\n\n## Solution\nEnable groups to pitch recipes, vote weekly, and auto-generate ingredient checklists.\n\n## Demo Hooks\n- Voting progress bar for recipe picks.\n- Ingredient checklist that updates per household.\n- CTA to import pantry items."
+  },
+  {
+    "title": "PetFit Planner",
+    "summary": "### Wellness plans for pets\nTrack exercise, nutrition, and vet milestones with AI-suggested routines.",
+    "one_pager": "# PetFit Planner\n\n## Problem\nPet parents guess about balanced routines and overlook early health warnings.\n\n## Solution\nProvide personalized plans with habit tracking, vet reminders, and community tips.\n\n## Demo Hooks\n- Activity streak dial per pet.\n- Nutrition cards highlighting gaps.\n- CTA to book a virtual consult."
+  },
+  {
+    "title": "Trail Beacon",
+    "summary": "### Smarter hiking alerts\nPredictive trail conditions and safety beacons for outdoor groups.",
+    "one_pager": "# Trail Beacon\n\n## Problem\nHikers rely on outdated reports and group texts for safety coordination.\n\n## Solution\nDeliver real-time weather shifts, hazard alerts, and breadcrumb tracking for teams.\n\n## Demo Hooks\n- Elevation profile animated with upcoming alerts.\n- Group roster showing live status.\n- Emergency check-in button."
+  },
+  {
+    "title": "Mindful Minutes",
+    "summary": "### Moments of calm\nMicro-meditations tailored to calendar stress peaks, delivered just-in-time.",
+    "one_pager": "# Mindful Minutes\n\n## Problem\nProfessionals skip mindfulness because guided sessions rarely align with their day.\n\n## Solution\nSync with calendars to offer 2-minute breathers before stressful events.\n\n## Demo Hooks\n- Timeline highlighting stress spikes.\n- Guided animation that adapts to breathing pace.\n- CTA to enable Slack reminders."
+  },
+  {
+    "title": "CraftCollab",
+    "summary": "### Makerspace coordination\nCoordinate shared tools, workshops, and build nights in local makerspaces.",
+    "one_pager": "# CraftCollab\n\n## Problem\nMakerspaces juggle sign-up sheets and email threads to manage equipment usage.\n\n## Solution\nCentralize tool calendars, waitlists, and workshop RSVPs in a simple portal.\n\n## Demo Hooks\n- Tool availability grid with color-coded slots.\n- Workshop highlight cards inviting RSVPs.\n- CTA to start a new build night."
+  },
+  {
+    "title": "StorySeed",
+    "summary": "### Seed your next novel\nStory starters and branching prompts that keep writers in flow.",
+    "one_pager": "# StorySeed\n\n## Problem\nWriters stall when moving from concept to structured chapters.\n\n## Solution\nGenerate adaptive prompts, character arcs, and outline checkpoints to sustain momentum.\n\n## Demo Hooks\n- Prompt carousel generating fresh twists.\n- Chapter progress tracker with milestone markers.\n- CTA to export outline to Notion."
+  },
+  {
+    "title": "Campus Concierge",
+    "summary": "### Welcome to campus\nOrientation hub that schedules events, explores campus, and connects cohorts.",
+    "one_pager": "# Campus Concierge\n\n## Problem\nNew students feel disconnected because event details and campus tips scatter across channels.\n\n## Solution\nBundle orientation schedules, peer groups, and campus tours into one interactive feed.\n\n## Demo Hooks\n- Map-based scavenger hunt with progress badges.\n- Social feed of upcoming meetups.\n- CTA to personalize the first-week plan."
+  },
+  {
+    "title": "WellNest",
+    "summary": "### Holistic roommate matching\nPair co-living roommates by wellness routines, quiet hours, and shared goals.",
+    "one_pager": "# WellNest\n\n## Problem\nRoommate apps ignore wellness compatibility, causing friction and churn.\n\n## Solution\nMatch people on lifestyle rhythms, quiet preferences, and wellness commitments.\n\n## Demo Hooks\n- Compatibility radar chart animating per match.\n- Habit timeline comparison.\n- CTA to schedule an intro call."
+  },
+  {
+    "title": "Locale Lens",
+    "summary": "### Hyper-local content studio\nNeighborhood creators share bite-sized guides, events, and interviews.",
+    "one_pager": "# Locale Lens\n\n## Problem\nLocal journalism budgets shrink, leaving neighborhoods under-covered.\n\n## Solution\nEmpower residents to publish short-format guides with collaborative editing.\n\n## Demo Hooks\n- Content grid with mood-based filters.\n- Creator leaderboard showing streaks.\n- CTA to pitch a story idea."
+  },
+  {
+    "title": "Volunteer Velocity",
+    "summary": "### Activate micro-volunteering\nMatch busy people with 15-minute impact tasks from nonprofits.",
+    "one_pager": "# Volunteer Velocity\n\n## Problem\nNonprofits struggle to engage volunteers who only have short windows of time.\n\n## Solution\nCurate micro-tasks that fit schedules, track impact minutes, and celebrate streaks.\n\n## Demo Hooks\n- Impact minutes counter rising in real time.\n- Task queue filtered by skills and duration.\n- CTA to pledge weekly minutes."
+  },
+  {
+    "title": "SoundSleep Coach",
+    "summary": "### Nights that restore\nAI-guided sleep routines that adapt to wearable data and nighttime journals.",
+    "one_pager": "# SoundSleep Coach\n\n## Problem\nSleep trackers surface data but rarely translate it into actionable coaching.\n\n## Solution\nBlend wearable metrics with pre-bed reflections to recommend nightly routines.\n\n## Demo Hooks\n- Sleep score timeline highlighting wins.\n- Routine builder with drag-and-drop steps.\n- CTA to sync a new wearable."
+  }
+]
+
