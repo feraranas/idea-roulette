@@ -101,7 +101,12 @@ IMPORTANT:
 - Finally, update git with \`git add . && git commit -m "..."\`. Don't push.
 `;
 
-const SYSTEM_PROMPT = `You are a senior front-end tech lead. Produce implementation-ready tasks that an AI agent can complete independently. Follow the rules exactly.`;
+const SYSTEM_PROMPT = `You are a technical fellow, the world's best software engineer who is also an expert technical product manager. Here are some .cursorrules to give you a high-level overview of the existing codebase.
+<CURSOR_RULES>
+${CURSOR_RULES}
+</CURSOR_RULES>
+
+Produce implementation-ready tasks that an AI agent can complete independently. Ensure your output is in human-readable markdown format. Follow the rules exactly.`;
 
 const RULES_BLOCK = `RULES
 - Scope: Single-page prototype only to demonstrate the core UX of the startup idea. No auth, no backend, no payments, no persistence, no forms beyond the prototype needs.
@@ -109,21 +114,21 @@ const RULES_BLOCK = `RULES
 - Storybook is mandatory: Every component and the Page must have CSF3 stories with docs/controls and at least one accessibility check.
 - Output is Markdown only, no code fences inside list items unless necessary; each checklist item is one story point, small and deliverable in isolation.
 - Favor clarity: reference intended file paths (e.g., src/components/atoms/Button.tsx).
-- Keep the tone terse and imperative.
+- Be detailed and specific, but also ensure it is human-readable and easy to understand.
 - Do not include authentication, authorization, data persistence, or production hardening.`;
 
-const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT in a markdown doc. The user will be able to read this but primarily this will be used by the AI agent to complete the tasks.
+const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT in a markdown doc using headers, subheaders, and checklists with unchecked checkboxes. The user will be able to read this but primarily this will be used by the AI agent to complete the tasks.
 1. **Prototype overview** — one paragraph (4–8 sentences) describing what the single page will show and how a user will interact with it to demonstrate the core idea.
-2. **Checklist** — a hierarchical markdown checklist of one-story-point items with these top-level sections (and only these):
+2. **Checklist** — a hierarchical markdown checklist of one-story-point items to build the prototype. For the components, you must include these top-level sections:
    - **Atoms** (UI primitives) - After each atom task, add a task to create a story for the atom.
    - **Organisms** (compositions of atoms that have behavior/logic) - After each organism task, add a task to create a story for the organism.
    - **Page** (single page assembly and wiring) - Do not create a story for the page.
+   - Any additional work that needs to be done to build the prototype. Remember that an AI agent will be using this checklist to build the prototype, so be sure to include all the details but keep it scoped to the prototype.
 
 Checklist conventions:
 - Use - [ ] for each item.
-- For each item, include: what to build, where to place it (path), and the minimal props/acceptance criteria.
+- For each atom or organism, you MUST include a task to create a story for the component directly after the task to build the component.
 - For Storybook items, specify at least: Default, Edge cases, and A11y stories.
-- Keep the entire output under 1,200 lines.
 
 BEGIN.`;
 
@@ -134,14 +139,17 @@ export const buildPrompt = ({
 }: BuildPromptInput): PromptPayload => {
   const userContent = `${RULES_BLOCK}
 
-INPUT
+You will be asked to create a task list to build a front-end prototype of the idea outlined in the <IDEA_DETAILS> section.
+<IDEA_DETAILS>
 Title: ${title}
 Summary (markdown):
 ${summary}
 
 One-pager (markdown):
 ${one_pager}
+</IDEA_DETAILS>
 
+Create a task list to build a front-end prototype of the idea outlined in the <IDEA_DETAILS> section.
 ${OUTPUT_FORMAT_BLOCK}`;
 
   return {

@@ -10,7 +10,11 @@ export type TasklistPanelProps = {
   onRegenerate?: () => void;
 };
 
-export const TasklistPanel = ({ markdown, onCopy, onRegenerate }: TasklistPanelProps) => {
+export const TasklistPanel = ({
+  markdown,
+  onCopy,
+  onRegenerate,
+}: TasklistPanelProps) => {
   return (
     <Card className="space-y-4">
       <header className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -32,7 +36,12 @@ export const TasklistPanel = ({ markdown, onCopy, onRegenerate }: TasklistPanelP
               Regenerate
             </button>
           )}
-          <CopyButton size="md" getText={() => markdown} onCopied={onCopy} disabled={!markdown}>
+          <CopyButton
+            size="md"
+            getText={() => markdown}
+            onCopied={onCopy}
+            disabled={!markdown}
+          >
             Copy
           </CopyButton>
         </div>
@@ -42,7 +51,7 @@ export const TasklistPanel = ({ markdown, onCopy, onRegenerate }: TasklistPanelP
         aria-live="polite"
       >
         {markdown ? (
-          <MarkdownRenderer markdown={markdown} className="prose-sm" />
+          <MarkdownRenderer markdown={markdown} variant="tasklist" />
         ) : (
           <p className="text-neutral-500 dark:text-neutral-400">
             Tasklist will appear here once generated.
@@ -52,4 +61,3 @@ export const TasklistPanel = ({ markdown, onCopy, onRegenerate }: TasklistPanelP
     </Card>
   );
 };
-

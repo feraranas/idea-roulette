@@ -161,3 +161,79 @@ body {
   animation: wave 1.5s infinite;
   transform-origin: 70% 70%;
 }
+
+@layer components {
+  .markdown-tasklist {
+    @apply prose prose-neutral dark:prose-invert max-w-none text-sm leading-6;
+  }
+
+  .markdown-tasklist :where(h1) {
+    @apply text-2xl font-semibold tracking-tight text-neutral-900 dark:text-neutral-50;
+  }
+
+  .markdown-tasklist :where(h2) {
+    @apply mt-8 border-t border-neutral-200 pt-6 text-lg font-semibold text-neutral-900 dark:border-neutral-700 dark:text-neutral-50;
+  }
+
+  .markdown-tasklist :where(h3) {
+    @apply mt-6 text-xs font-semibold uppercase tracking-[0.15em] text-neutral-500 dark:text-neutral-400;
+  }
+
+  .markdown-tasklist :where(p) {
+    @apply text-neutral-600 dark:text-neutral-300;
+  }
+
+  .markdown-tasklist :where(ul),
+  .markdown-tasklist :where(ol) {
+    @apply list-none space-y-3 p-0;
+  }
+
+  .markdown-tasklist :where(ul ul),
+  .markdown-tasklist :where(ol ul),
+  .markdown-tasklist :where(ul ol),
+  .markdown-tasklist :where(ol ol) {
+    @apply mt-3 space-y-2 pl-6;
+  }
+
+  .markdown-tasklist :where(li) {
+    @apply rounded-xl border border-neutral-200 bg-white px-4 py-3 text-neutral-700 shadow-sm transition dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-200;
+  }
+
+  .markdown-tasklist :where(li + li) {
+    @apply mt-3;
+  }
+
+  .markdown-tasklist :where(li.task-list-item) {
+    @apply flex items-start gap-3;
+  }
+
+  .markdown-tasklist :where(li.task-list-item > input[type="checkbox"]) {
+    @apply mt-1 h-4 w-4 flex-none rounded border-neutral-300 accent-blue-600 dark:border-neutral-600 dark:bg-neutral-900;
+    pointer-events: none;
+  }
+
+  .markdown-tasklist
+    :where(li.task-list-item > input[type="checkbox"]:focus-visible) {
+    @apply outline-none ring-2 ring-blue-500 ring-offset-2 dark:ring-offset-neutral-900;
+  }
+
+  .markdown-tasklist :where(li.task-list-item > :not(input)) {
+    @apply w-full space-y-2;
+  }
+
+  .markdown-tasklist :where(blockquote) {
+    @apply border-l-4 border-blue-200 bg-blue-50/80 px-4 py-3 text-neutral-700 dark:border-blue-800 dark:bg-blue-900/40 dark:text-neutral-100;
+  }
+
+  .markdown-tasklist :where(code) {
+    @apply rounded bg-neutral-100 px-1.5 py-0.5 font-mono text-[0.875rem] dark:bg-neutral-800;
+  }
+
+  .markdown-tasklist :where(pre) {
+    @apply max-h-[320px] overflow-auto rounded-xl bg-neutral-900 p-4 font-mono text-sm leading-relaxed text-neutral-100 dark:bg-neutral-950;
+  }
+
+  .markdown-tasklist :where(a) {
+    @apply font-medium text-blue-600 underline decoration-blue-400 decoration-2 underline-offset-4 hover:text-blue-700 dark:text-blue-300 dark:hover:text-blue-200;
+  }
+}

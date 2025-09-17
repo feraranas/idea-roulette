@@ -65,6 +65,7 @@ type AIClientResponse = {
 
 export const AI_MODELS = {
   SONNET: "claude-3-5-sonnet-20241022",
+  GPT_5: "gpt-5",
   O1: "o1-2024-12-17",
   GPT_4O: "gpt-4o",
   GPT_4O_MINI: "gpt-4o-mini",

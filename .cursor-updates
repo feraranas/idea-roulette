@@ -13,3 +13,4 @@
 - Wrapped tasklist OpenAI call in try/catch to surface TRPC errors cleanly and rebuilt
 - Improved tasklist router error messaging (API key hint, safe fallback) and reran build
 - Styled IdeaDetails one pager paragraphs by splitting newline-delimited text into clean sections and reran build
+ - Added Tailwind Typography plugin and tasklist markdown styles; cleaned up LLM checklist rendering

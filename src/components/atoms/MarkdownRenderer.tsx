@@ -9,6 +9,7 @@ import type { ComponentPropsWithoutRef, ReactNode } from "react";
 export type MarkdownRendererProps = {
   markdown: string;
   className?: string;
+  variant?: "default" | "tasklist";
 };
 
 const headingClassName = "font-semibold text-neutral-900 dark:text-neutral-50";
@@ -31,7 +32,7 @@ const Code = ({ className, children, inline, ...props }: CodeProps) => (
   </code>
 );
 
-const components: Components = {
+const defaultComponents: Components = {
   h1: ({ className, ...props }) => (
     <h1 className={clsx("text-2xl", headingClassName, className)} {...props} />
   ),
@@ -56,13 +57,28 @@ const components: Components = {
   ),
 };
 
-export const MarkdownRenderer = ({ markdown, className }: MarkdownRendererProps) => {
+const tasklistComponents: Components = {
+  ...defaultComponents,
+};
+
+export const MarkdownRenderer = ({
+  markdown,
+  className,
+  variant = "default",
+}: MarkdownRendererProps) => {
+  const containerClassName =
+    variant === "tasklist"
+      ? "markdown-tasklist"
+      : "prose prose-neutral dark:prose-invert";
+
+  const components =
+    variant === "tasklist" ? tasklistComponents : defaultComponents;
+
   return (
-    <div className={clsx("prose prose-neutral dark:prose-invert", className)}>
+    <div className={clsx(containerClassName, className)}>
       <ReactMarkdown remarkPlugins={[remarkGfm]} components={components}>
         {markdown}
       </ReactMarkdown>
     </div>
   );
 };
-
