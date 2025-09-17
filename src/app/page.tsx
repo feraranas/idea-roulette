@@ -32,6 +32,11 @@ export default function Page() {
   const [tasklist, setTasklist] = useState<string>("");
 
   const utils = api.useUtils();
+  const ensureCache = api.tasklist.ensure.useMutation({
+    onError: (error) => {
+      console.error("Tasklist prefetch failed", error);
+    },
+  });
   const generateTasklist = api.tasklist.generate.useMutation({
     onMutate: () => {
       setState("generating");
@@ -67,6 +72,8 @@ export default function Page() {
   const handleDone = (idea: Idea) => {
     setChosenIdea(idea);
     setState("chosen");
+    // Prime cache in the background so Generate is instant if possible
+    ensureCache.mutate(idea);
   };
 
   const handleGenerate = () => {

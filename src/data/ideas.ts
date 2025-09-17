@@ -9,7 +9,7 @@ const ideaSchema = z.object({
   one_pager: z.string().min(1),
 });
 
-const ideasSchema = z.array(ideaSchema).length(100);
+const ideasSchema = z.array(ideaSchema).length(20);
 
 export const ideas: Idea[] = ideasSchema.parse(rawIdeas);
 
