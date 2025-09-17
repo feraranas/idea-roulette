@@ -6,11 +6,30 @@ import { getOpenAI } from "./ai/openai";
 
 const CACHE_FILE = path.join(process.cwd(), "src", "data", "cache.json");
 
+// Simple in-process mutex to serialize cache writes
+let cacheLock: Promise<void> = Promise.resolve();
+async function withCacheLock<T>(fn: () => Promise<T>): Promise<T> {
+  const previous = cacheLock;
+  let release: () => void;
+  cacheLock = new Promise<void>((res) => {
+    release = res;
+  });
+  await previous;
+  try {
+    return await fn();
+  } finally {
+    // @ts-expect-error release is assigned above
+    release();
+  }
+}
+
 export async function readCache(): Promise<Record<string, string>> {
   try {
     const raw = await readFile(CACHE_FILE, "utf8");
     const data = JSON.parse(raw);
-    return data && typeof data === "object" ? (data as Record<string, string>) : {};
+    return data && typeof data === "object"
+      ? (data as Record<string, string>)
+      : {};
   } catch {
     return {};
   }
@@ -21,7 +40,9 @@ export async function writeCache(cache: Record<string, string>): Promise<void> {
   await writeFile(CACHE_FILE, serialized, "utf8");
 }
 
-export function cacheKeyFromInput(input: Pick<BuildPromptInput, "title">): string {
+export function cacheKeyFromInput(
+  input: Pick<BuildPromptInput, "title">,
+): string {
   return input.title.trim().toLowerCase();
 }
 
@@ -51,8 +72,14 @@ export async function ensureTasklistCached(
     throw new Error("OpenAI returned an empty response");
   }
 
-  cache[key] = markdown;
-  await writeCache(cache);
+  // Serialize write and re-check to avoid lost updates under concurrency
+  await withCacheLock(async () => {
+    const latest = await readCache();
+    if (!latest[key] || !latest[key].trim()) {
+      latest[key] = markdown;
+      await writeCache(latest);
+    }
+  });
 
   return { cached: false } as const;
 }
@@ -72,7 +99,11 @@ export async function generateTasklistWithCache(
   const key = cacheKeyFromInput(input);
   const cache = await readCache();
   const cachedMarkdown = cache[key];
-  if (cachedMarkdown && typeof cachedMarkdown === "string" && cachedMarkdown.trim()) {
+  if (
+    cachedMarkdown &&
+    typeof cachedMarkdown === "string" &&
+    cachedMarkdown.trim()
+  ) {
     return cachedMarkdown;
   }
 
@@ -93,10 +124,14 @@ export async function generateTasklistWithCache(
     throw new Error("OpenAI returned an empty response");
   }
 
-  cache[key] = markdown;
-  await writeCache(cache);
+  await withCacheLock(async () => {
+    const latest = await readCache();
+    if (!latest[key] || !latest[key].trim()) {
+      latest[key] = markdown;
+      await writeCache(latest);
+    }
+  });
 
   return markdown;
 }
-
 

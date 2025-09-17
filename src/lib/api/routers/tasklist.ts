@@ -4,10 +4,7 @@ import { buildPrompt } from "@/lib/ai/prompt";
 import { getOpenAI } from "@/lib/ai/openai";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import { TRPCError } from "@trpc/server";
-import {
-  ensureTasklistCached,
-  generateTasklistWithCache,
-} from "@/lib/cache";
+import { ensureTasklistCached, generateTasklistWithCache } from "@/lib/cache";
 
 export const tasklistRouter = createTRPCRouter({
   ensure: publicProcedure
