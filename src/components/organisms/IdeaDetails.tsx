@@ -13,8 +13,15 @@ export type IdeaDetailsProps = {
   defaultExpanded?: boolean;
 };
 
-export const IdeaDetails = ({ idea, defaultExpanded = false }: IdeaDetailsProps) => {
+export const IdeaDetails = ({
+  idea,
+  defaultExpanded = false,
+}: IdeaDetailsProps) => {
   const [expanded, setExpanded] = useState(defaultExpanded);
+  const paragraphs = idea.one_pager
+    .split(/\n+/)
+    .map((paragraph) => paragraph.trim())
+    .filter(Boolean);
 
   return (
     <Card className="space-y-6">
@@ -34,11 +41,13 @@ export const IdeaDetails = ({ idea, defaultExpanded = false }: IdeaDetailsProps)
         >
           {expanded ? (
             <>
-              <ChevronUp className="h-4 w-4" aria-hidden="true" /> Hide one pager
+              <ChevronUp className="h-4 w-4" aria-hidden="true" /> Hide one
+              pager
             </>
           ) : (
             <>
-              <ChevronDown className="h-4 w-4" aria-hidden="true" /> View one pager
+              <ChevronDown className="h-4 w-4" aria-hidden="true" /> View one
+              pager
             </>
           )}
         </button>
@@ -51,7 +60,11 @@ export const IdeaDetails = ({ idea, defaultExpanded = false }: IdeaDetailsProps)
               transition={{ duration: 0.28, ease: "easeInOut" }}
               className="overflow-hidden"
             >
-              <MarkdownRenderer markdown={idea.one_pager} className="prose-sm" />
+              <div className="space-y-4 text-sm leading-6 text-neutral-700 dark:text-neutral-200">
+                {paragraphs.map((paragraph, index) => (
+                  <p key={index}>{paragraph}</p>
+                ))}
+              </div>
             </motion.div>
           )}
         </AnimatePresence>
@@ -59,4 +72,3 @@ export const IdeaDetails = ({ idea, defaultExpanded = false }: IdeaDetailsProps)
     </Card>
   );
 };
-

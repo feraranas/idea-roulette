@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 import { Button } from "@/components/atoms/Button";
 import { Card } from "@/components/atoms/Card";
-import { Kicker } from "@/components/atoms/Kicker";
 import { Spinner } from "@/components/atoms/Spinner";
 import { IdeaDetails } from "@/components/organisms/IdeaDetails";
 import { IdeaSlotMachine } from "@/components/organisms/IdeaSlotMachine";
@@ -14,7 +13,13 @@ import { ideas } from "@/data/ideas";
 import type { Idea } from "@/types/idea";
 import { api } from "@/lib/trpc/react";
 
-type AppState = "idle" | "spinning" | "chosen" | "generating" | "ready" | "error";
+type AppState =
+  | "idle"
+  | "spinning"
+  | "chosen"
+  | "generating"
+  | "ready"
+  | "error";
 
 const selectIdea = () => {
   const index = Math.floor(Math.random() * ideas.length);
@@ -69,8 +74,9 @@ export default function Page() {
     generateTasklist.mutate(chosenIdea);
   };
 
-  const fastMode = typeof window !== "undefined" && window.location.search.includes("fast=1");
-  const slotDuration = useMemo(() => (fastMode ? 1500 : 6500), [fastMode]);
+  const fastMode =
+    typeof window !== "undefined" && window.location.search.includes("fast=1");
+  const slotDuration = useMemo(() => (fastMode ? 1500 : 3000), [fastMode]);
 
   const primaryButtonLabel = (() => {
     if (state === "spinning") return "Spinning...";
@@ -83,17 +89,12 @@ export default function Page() {
   return (
     <main className="mx-auto flex min-h-screen max-w-3xl flex-col gap-8 px-6 py-12">
       <header className="space-y-4">
-        <Kicker>Single-page prototype only — no auth or persistence</Kicker>
         <h1 className="text-3xl font-semibold text-neutral-900 dark:text-neutral-50">
           AI Task-List Creator
         </h1>
         <p className="text-sm text-neutral-500 dark:text-neutral-400">
-          Spin for a random startup idea, generate an atomic design task list, and copy it for your
-          next build session.
-        </p>
-        <p className="text-xs text-neutral-400 dark:text-neutral-500">
-          Scope: This demo generates tasks for a single-page prototype only. No auth, backend, or
-          production features—just the core UX to illustrate Storybook-driven development.
+          Spin for a random startup idea, generate an atomic design task list,
+          and copy it for your next build session.
         </p>
       </header>
 
@@ -120,34 +121,40 @@ export default function Page() {
       </section>
 
       {state === "spinning" && (
-        <IdeaSlotMachine ideas={ideas} durationMs={slotDuration} onDone={handleDone} />
+        <IdeaSlotMachine
+          ideas={ideas}
+          durationMs={slotDuration}
+          onDone={handleDone}
+        />
       )}
 
-      {(state === "chosen" || state === "generating" || state === "ready") && chosenIdea && (
-        <section className="space-y-6">
-          <IdeaDetails idea={chosenIdea} />
+      {(state === "chosen" || state === "generating" || state === "ready") &&
+        chosenIdea && (
+          <section className="space-y-6">
+            <IdeaDetails idea={chosenIdea} />
 
-          {state === "generating" && (
-            <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
-              <Spinner size="md" /> Generating task list with GPT-5...
-            </div>
-          )}
+            {state === "generating" && (
+              <div className="flex items-center gap-3 text-sm text-neutral-500 dark:text-neutral-400">
+                <Spinner size="md" /> Generating task list with GPT-5...
+              </div>
+            )}
 
-          {state === "ready" && (
-            <TasklistPanel
-              markdown={tasklist}
-              onCopy={() => toast.success("Task list copied")}
-              onRegenerate={handleGenerate}
-            />
-          )}
-        </section>
-      )}
+            {state === "ready" && (
+              <TasklistPanel
+                markdown={tasklist}
+                onCopy={() => toast.success("Task list copied")}
+                onRegenerate={handleGenerate}
+              />
+            )}
+          </section>
+        )}
 
       {state === "error" && (
         <Card className="border-red-200 bg-red-50 text-red-700 dark:border-red-900/60 dark:bg-red-950/40 dark:text-red-200">
           <h2 className="text-lg font-semibold">Something went wrong</h2>
           <p className="text-sm">
-            We couldn&apos;t generate the task list. Please try again or pick another idea.
+            We couldn&apos;t generate the task list. Please try again or pick
+            another idea.
           </p>
           <div className="mt-4 flex gap-3">
             <Button size="md" onClick={handleGenerate}>

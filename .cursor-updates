@@ -12,3 +12,4 @@
 - Removed OpenAI temperature override so default-only models work and reran build
 - Wrapped tasklist OpenAI call in try/catch to surface TRPC errors cleanly and rebuilt
 - Improved tasklist router error messaging (API key hint, safe fallback) and reran build
+- Styled IdeaDetails one pager paragraphs by splitting newline-delimited text into clean sections and reran build

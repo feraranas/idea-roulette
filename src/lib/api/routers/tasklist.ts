@@ -41,8 +41,8 @@ export const tasklistRouter = createTRPCRouter({
           error instanceof Error && error.message.includes("OPENAI_API_KEY")
             ? "OpenAI API key is not configured. Set OPENAI_API_KEY in your environment."
             : error instanceof Error
-              ? error.message
-              : "Failed to generate task list";
+            ? error.message
+            : "Failed to generate task list";
 
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",

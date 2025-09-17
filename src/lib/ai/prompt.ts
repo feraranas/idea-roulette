@@ -9,6 +9,98 @@ export type PromptPayload = {
   user: string;
 };
 
+const CURSOR_RULES = `# .cursorrules
+
+Components & Naming
+
+- Use functional components with \`"use client"\` if needed.
+- Name in PascalCase under \`src/components/\`.
+- Keep them small, typed with interfaces.
+- Use Tailwind for common UI components like textarea, button, etc. Never use radix or shadcn.
+
+Prisma
+
+- Manage DB logic with Prisma in \`prisma/schema.prisma\`, \`src/lib/db.ts\`.
+- snake_case table → camelCase fields.
+- No raw SQL; run \`npx prisma migrate dev\`, never use \`npx prisma db push\`.
+
+Icons
+
+- Prefer \`lucide-react\`; name icons in PascalCase.
+- Custom icons in \`src/components/icons\`.
+
+Toast Notifications
+
+- Use \`react-toastify\` in client components.
+- \`toast.success()\`, \`toast.error()\`, etc.
+
+Next.js Structure
+
+- Use App Router in \`app/\`. Server components by default, \`"use client"\` for client logic.
+- NextAuth + Prisma for auth. \`\.env\` for secrets.
+
+tRPC Routers
+
+- Routers in \`src/lib/api/routers\`, compose in \`src/lib/api/root.ts\`.
+- \`publicProcedure\` or \`protectedProcedure\` with Zod.
+- Access from React via \`@/lib/trpc/react\`.
+
+TypeScript & Syntax
+
+- Strict mode. Avoid \`any\`.
+- Use optional chaining, union types (no enums).
+
+File & Folder Names
+
+- Next.js routes in kebab-case (e.g. \`app/dashboard/page.tsx\`).
+- Shared types in \`src/lib/types.ts\`.
+- Sort imports (external → internal → sibling → styles).
+
+Tailwind Usage
+
+- Use Tailwind (mobile-first, dark mode with dark:(class)). Extend brand tokens in \`tailwind.config.ts\`.
+- For animations, prefer Framer Motion.
+
+Inngest / Background Jobs
+
+- Use \`inngest.config.ts\` for Inngest configuration.
+- Use \`src/app/api/inngest/route.ts\` for Inngest API route.
+- Use polling to update the UI when Inngest events are received, not trpc success response.
+
+AI
+
+- Use \`generateChatCompletion\` in \`src/lib/aiClient.ts\` for all AI calls.
+- Prefer \`O1\` model with high reasoning effort for all AI calls.
+
+Storybook
+
+- Place stories in \`src/stories\` with \`.stories.tsx\` extension.
+- One story file per component, matching component name.
+- Use autodocs for automatic documentation.
+- Include multiple variants and sizes in stories.
+- Test interactive features with actions.
+- Use relative imports from component directory.
+
+Tools
+
+- When you make a change to the UI, use the \`screenshot\` tool to show the changes.
+- If the user asks for a complex task to be performed, find any relevant files and call the \`architect\` tool to get a plan and show it to the user. Use this plan as guidance for the changes you make, but maintain the existing patterns and structure of the codebase.
+- After a complex task is performed, use the \`codeReview\` tool create a diff and use the diff to conduct a code review of the changes.
+
+Additional
+
+- Keep code short; commits semantic.
+- Reusable logic in \`src/lib/utils/shared.ts\` or \`src/lib/utils/server.ts\`.
+- Use \`tsx\` scripts for migrations.
+
+IMPORTANT:
+
+- After all changes are made, ALWAYS build the project with \`npm run build\`. Ignore warnings, fix errors.
+- Always add a one-sentence summary of changes to \`\.cursor-updates\` file in markdown format at the end of every agent interaction.
+- If you forget, the user can type the command "finish" and you will run the build and update \`.cursor-updates\`.
+- Finally, update git with \`git add . && git commit -m "..."\`. Don't push.
+`;
+
 const SYSTEM_PROMPT = `You are a senior front-end tech lead. Produce implementation-ready tasks that an AI agent can complete independently. Follow the rules exactly.`;
 
 const RULES_BLOCK = `RULES
@@ -20,13 +112,12 @@ const RULES_BLOCK = `RULES
 - Keep the tone terse and imperative.
 - Do not include authentication, authorization, data persistence, or production hardening.`;
 
-const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT (exactly this order):
+const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT in a markdown doc. The user will be able to read this but primarily this will be used by the AI agent to complete the tasks.
 1. **Prototype overview** — one paragraph (4–8 sentences) describing what the single page will show and how a user will interact with it to demonstrate the core idea.
 2. **Checklist** — a hierarchical markdown checklist of one-story-point items with these top-level sections (and only these):
-   - **Atoms** (UI primitives).
-   - **Organisms** (compositions of atoms that have behavior/logic).
-   - **Page** (single page assembly and wiring).
-   - **Storybook** (stories for each atom/organism/page, with docs, controls, and an a11y pass).
+   - **Atoms** (UI primitives) - After each atom task, add a task to create a story for the atom.
+   - **Organisms** (compositions of atoms that have behavior/logic) - After each organism task, add a task to create a story for the organism.
+   - **Page** (single page assembly and wiring) - Do not create a story for the page.
 
 Checklist conventions:
 - Use - [ ] for each item.
@@ -36,7 +127,11 @@ Checklist conventions:
 
 BEGIN.`;
 
-export const buildPrompt = ({ title, summary, one_pager }: BuildPromptInput): PromptPayload => {
+export const buildPrompt = ({
+  title,
+  summary,
+  one_pager,
+}: BuildPromptInput): PromptPayload => {
   const userContent = `${RULES_BLOCK}
 
 INPUT
