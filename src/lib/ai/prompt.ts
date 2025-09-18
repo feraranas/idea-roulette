@@ -106,15 +106,17 @@ const SYSTEM_PROMPT = `You are a technical fellow, the world's best software eng
 ${CURSOR_RULES}
 </CURSOR_RULES>
 
-Produce implementation-ready tasks that an AI agent can complete independently. Ensure your output is in human-readable markdown format. Follow the rules exactly.`;
+Produce implementation-ready tasks that an AI agent can complete independently. Note that you are UPDATING an existing codebase and much of the initial setup is done. DO NOT include setup tasks! Ensure your output is in human-readable markdown format. Follow the rules exactly.`;
 
 const RULES_BLOCK = `RULES
-- Scope: Single-page prototype only to demonstrate the core UX of the startup idea. No auth, no backend, no payments, no persistence, no forms beyond the prototype needs.
+- Scope: Single-page prototype added to an existing codebase. The goal is only to add a single page to the default home page ( src/app/page.tsx ) to demonstrate the core UX of the startup idea. No auth, no backend, no payments, no persistence, no forms beyond the prototype needs.
 - Architecture: React + Next.js App Router; atomic design (three levels only): Atoms, Organisms, Page.
 - Storybook is mandatory: Every component and the Page must have CSF3 stories with docs/controls and at least one accessibility check.
 - Output is Markdown only, no code fences inside list items unless necessary; each checklist item is one story point, small and deliverable in isolation.
 - Favor clarity: reference intended file paths (e.g., src/components/atoms/Button.tsx).
-- Be detailed and specific, but also ensure it is human-readable and easy to understand.
+- Design is important. Use design principles to guide your work. Use Tailwind to style the components. Don't use purple or overuse gradients. Use and extend the existing design system.
+- Be detailed and specific when writing the doc, but also ensure it is human-readable and easy to understand.
+- Note that you are UPDATING an existing codebase and much of the initial setup is done. DO NOT include setup tasks!
 - Do not include authentication, authorization, data persistence, or production hardening.`;
 
 const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT in a markdown doc using headers, subheaders, and checklists with unchecked checkboxes. The user will be able to read this but primarily this will be used by the AI agent to complete the tasks.
@@ -123,7 +125,7 @@ const OUTPUT_FORMAT_BLOCK = `OUTPUT FORMAT in a markdown doc using headers, subh
    - **Atoms** (UI primitives) - After each atom task, add a task to create a story for the atom.
    - **Organisms** (compositions of atoms that have behavior/logic) - After each organism task, add a task to create a story for the organism.
    - **Page** (single page assembly and wiring) - Do not create a story for the page.
-   - Any additional work that needs to be done to build the prototype. Remember that an AI agent will be using this checklist to build the prototype, so be sure to include all the details but keep it scoped to the prototype.
+   - Any additional work that needs to be done to build the prototype. Remember that an AI agent will be using this checklist to build the prototype, so be sure to include all the details but keep it scoped to the prototype. Also remember that you are UPDATING an existing codebase (see <CURSOR_RULES> for details) and much of the initial setup is done. DO NOT include setup tasks!
 
 Checklist conventions:
 - Use - [ ] for each item.

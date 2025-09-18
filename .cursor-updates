@@ -16,4 +16,4 @@
 - Added Tailwind Typography plugin and tasklist markdown styles; cleaned up LLM checklist rendering
 - Added simple file-backed LLM cache (src/data/cache.json) with prefetch on idea selection and TRPC cache lookup
 - Added warm-cache script using shared helpers; npm run warm-cache to precompute 20 ideas
- - Fixed cache race with a simple mutex to prevent concurrent write clobbering; warm-cache runs 5 concurrent
+- Fixed cache race with a simple mutex to prevent concurrent write clobbering; warm-cache runs 5 concurrent
