@@ -1,0 +1,4 @@
+- main:
+  - heading "AI Task-List Creator" [level=1]
+  - paragraph: Spin for a random startup idea, generate an atomic design task list, and copy it for your next build session.
+  - button "Pick a Random Startup Idea"

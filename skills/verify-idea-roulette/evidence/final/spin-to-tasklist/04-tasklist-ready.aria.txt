@@ -1,0 +1,282 @@
+- main:
+  - heading "AI Task-List Creator" [level=1]
+  - paragraph: Spin for a random startup idea, generate an atomic design task list, and copy it for your next build session.
+  - button "Generate again"
+  - button "Pick another idea"
+  - heading "Subcontractor Invoice Reconciliation Tool" [level=1]
+  - paragraph: Upload subcontractor invoices and original contracts to automatically flag discrepancies in rates, quantities, and scope changes. Generates summary reports showing approved vs. billed amounts, helping general contractors catch billing errors that typically cost 3-8% of project value when missed.
+  - button "Hide one pager" [expanded]
+  - paragraph: The Subcontractor Invoice Reconciliation Tool serves project managers and accounts payable teams at general contractors managing $10-100 million in annual subcontractor spend. These professionals, typically managing 5-20 active projects with 50-200 subcontractors, lose 3-8% of project margin to billing errors, unauthorized change orders, and rate discrepancies that slip through manual review processes. The pressure to process invoices quickly for cash flow management conflicts with the need for detailed verification, creating an environment where expensive errors are inevitable.
+  - paragraph: The core value proposition is recovering lost margin by catching billing errors before payment, with most customers seeing ROI within the first month of use. By automatically comparing every line item on subcontractor invoices against original contract terms, the tool identifies discrepancies that human reviewers miss in the rush to process hundreds of invoices monthly. The system transforms invoice review from a rushed, error-prone task into a systematic verification process that takes minutes instead of hours while catching 10x more discrepancies.
+  - paragraph: The comprehensive feature set starts with intelligent document parsing that extracts data from PDF invoices and contracts using advanced OCR with construction-specific training. The contract database maintains current rates, terms, and approved change orders for every subcontractor, with automatic version control and audit trails. The reconciliation engine performs line-by-line matching of invoice items against contract terms, flagging rate variances, quantity overages, and unauthorized work. The discrepancy dashboard prioritizes issues by dollar value and provides one-click drill-down to source documents.
+  - paragraph: The approval workflow routes flagged invoices to appropriate reviewers with annotated discrepancies and suggested resolutions. The dispute documentation generator creates professional variance reports for subcontractor discussions, complete with contract references and calculation details. The analytics module tracks error patterns by subcontractor, project, and category, identifying problematic vendors and common billing issues. The integration layer exports approved amounts to accounting systems and maintains synchronization with project management platforms.
+  - paragraph: For controllers watching margins erode and project managers drowning in paperwork, this tool transforms invoice reconciliation from a necessary evil into a profit center that pays for itself with the first caught error.
+  - heading "AI Agent Tasklist" [level=2]
+  - paragraph: Review, copy, and share the generated checklist.
+  - button "Regenerate"
+  - button "Copy"
+  - heading "Prototype overview" [level=1]
+  - paragraph: This single-page prototype demonstrates how a general contractor would reconcile a subcontractor invoice against its original contract to catch billing errors before payment. The user lands on the default home page and can either drag-and-drop (mock) an invoice and a contract or click “Use sample data” to prefill the experience. With one click on “Run Reconciliation,” the page generates a summary of billed vs. approved amounts, highlights variance totals, and shows a detailed line-item table that flags discrepancies in rate, quantity, and scope. Filters allow users to quickly view only problematic items (e.g., rate or quantity issues). A side-panel “Discrepancy Report” provides a concise, shareable summary for dispute documentation. The entire experience is responsive, keyboard-accessible, and uses the existing design system with Tailwind styling, avoiding gradients and purple. All data is local and mocked; no uploads, persistence, or backend services are involved.
+  - heading "Checklist" [level=1]
+  - heading "Atoms" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Button atom (src/components/atoms/Button.tsx)
+      - list:
+        - listitem: "Props: variant (\"primary\" | \"secondary\" | \"danger\" | \"ghost\"), size (\"sm\" | \"md\"), loading (boolean), disabled (boolean), iconLeft (ReactNode), iconRight (ReactNode), ariaLabel (string)."
+        - listitem: "Behavior: focus-visible ring, keyboard accessible, disabled + loading states, consistent spacing for icons/text."
+        - listitem: "Tailwind: use brand tokens (blue/gray/rose/amber), subtle hover/active, high-contrast focus ring."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for Button (src/stories/Button.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (primary md), Edge cases (loading, disabled, icon-only with aria-label), A11y (keyboard tab order and focus ring)."
+        - listitem: CSF3 + autodocs with controls for variant, size, loading, disabled.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Badge atom (src/components/atoms/Badge.tsx)
+      - list:
+        - listitem: "Props: tone (\"ok\" | \"warning\" | \"error\" | \"info\"), children (string or ReactNode), className (optional)."
+        - listitem: "Style: compact, rounded, medium contrast; color map to success/amber/rose/blue tokens."
+        - listitem: "Usage: discrepancy status indicators in tables."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for Badge (src/stories/Badge.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (info), Edge cases (very long text, emoji), A11y (color contrast check per tone)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create ProgressBar atom (src/components/atoms/ProgressBar.tsx)
+      - list:
+        - listitem: "Props: value (number 0–100), label (string), ariaLabel (string), showLabel (boolean)."
+        - listitem: "Style: subtle track, filled bar with smooth transition, text label optional."
+        - listitem: "A11y: role=\"progressbar\" with aria-valuenow/aria-valuemin/aria-valuemax, visible or hidden label."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for ProgressBar (src/stories/ProgressBar.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (65%), Edge cases (0%, 100%, values beyond bounds clamped), A11y (screen reader label)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create FilterChip atom (src/components/atoms/FilterChip.tsx)
+      - list:
+        - listitem: "Props: label (string), active (boolean), onClick (callback), count (number optional), ariaControls (string optional)."
+        - listitem: "Style: pill-like, subtle fill on active, number badge when count provided."
+        - listitem: "A11y: aria-pressed for toggle semantics."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for FilterChip (src/stories/FilterChip.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (inactive), Edge cases (active with high count, very long label), A11y (aria-pressed toggling via keyboard)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Table atom (src/components/atoms/Table.tsx)
+      - list:
+        - listitem: "Exports: Table, TableHead, TableBody, TableRow, TableHeaderCell, TableCell."
+        - listitem: "Style: responsive table with sticky header on overflow-x, zebra rows, compact density; accessible roles/semantics."
+        - listitem: "Props: minimal, forward className, accepts children."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for Table (src/stories/Table.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (sample 3x4 table), Edge cases (empty state row, long content wrapping, narrow viewport overflow), A11y (scope on headers, row header sample)."
+  - heading "Organisms" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create UploadPanel organism (src/components/organisms/UploadPanel.tsx)
+      - list:
+        - listitem: "Purpose: two drop zones for Invoice and Contract; optional \"Use sample data\" control."
+        - listitem: "Props: onInvoiceSelect(file: File | null), onContractSelect(file: File | null), onUseSampleData(), selectedInvoiceName?, selectedContractName?."
+        - listitem: "Behavior: drag-over highlight; click to choose file (no actual parsing); show selected file names; use react-toastify to confirm sample data action."
+        - listitem: "Style: cards with dashed borders, file icon (lucide-react: FileIcon or FileUp), helpful hints."
+        - listitem: "A11y: label each zone, keyboard activation via Enter/Space on focusable root."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for UploadPanel (src/stories/UploadPanel.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (no files), Edge cases (one file selected, both files selected, drag-over), A11y (tab to zones, role and aria-live for selection feedback)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create SummaryBar organism (src/components/organisms/SummaryBar.tsx)
+      - list:
+        - listitem: "Purpose: show totals for Billed, Approved, Variance, and a progress visualization of approved vs. billed."
+        - listitem: "Props: billedCents (number), approvedCents (number), varianceCents (number), currency (string, default \"USD\")."
+        - listitem: "Uses: ProgressBar atom; money formatting helper; colors align: approved (emerald), variance (rose)."
+        - listitem: "A11y: semantic grouping, clear labels; numeral formatted with locale."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for SummaryBar (src/stories/SummaryBar.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (typical values), Edge cases (zeros across, all variance, extremely large numbers), A11y (screen reader friendly labels, high contrast check)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create FilterBar organism (src/components/organisms/FilterBar.tsx)
+      - list:
+        - listitem: "Purpose: toggle filters to refine table view."
+        - listitem: "Props: value (\"all\" | \"discrepancies\" | \"rate\" | \"quantity\" | \"scope\"), counts ({ all, discrepancies, rate, quantity, scope }), onChange(nextValue)."
+        - listitem: "Uses: FilterChip atom instances with counts."
+        - listitem: "A11y: role=\"tablist\" optional; maintain aria-controls linking to table region."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for FilterBar (src/stories/FilterBar.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (with mixed counts), Edge cases (all zeros, only discrepancies non-zero), A11y (keyboard navigation across chips)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create ReconciliationTable organism (src/components/organisms/ReconciliationTable.tsx)
+      - list:
+        - listitem: "Purpose: display reconciled line items with flags and deltas."
+        - listitem: "Props: items: Array<{ id, code, description, unit, contractRateCents, invoiceRateCents, contractQtyRemaining, invoiceQty, amountDeltaCents, status: \"ok\" | \"rate\" | \"quantity\" | \"scope\" }>, sortBy (\"delta\" | \"code\"), onSortChange, filter (\"all\" | \"discrepancies\" | \"rate\" | \"quantity\" | \"scope\")."
+        - listitem: "Behavior: filters items client-side, simple sort toggles; shows Badge for status; deltas color-coded; sticky header; empty state row when no items."
+        - listitem: "A11y: table semantics; aria-sort on active header; numeric columns right-aligned; captions describe filter."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for ReconciliationTable (src/stories/ReconciliationTable.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (mixed statuses), Edge cases (no discrepancies, all discrepancies, very long descriptions), A11y (aria-sort switching with keyboard, caption present)."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create DiscrepancyReportPanel organism (src/components/organisms/DiscrepancyReportPanel.tsx)
+      - list:
+        - listitem: "Purpose: slide-over panel summarizing discrepancies; “Copy summary” action."
+        - listitem: "Props: open (boolean), onClose(), items (subset of reconciled with discrepancies), totals ({ billedCents, approvedCents, varianceCents })."
+        - listitem: "Behavior: Copy summary to clipboard (navigator.clipboard) and toast.success; close on Escape and backdrop click; trap focus."
+        - listitem: "Style: fixed right panel, overlay backdrop, responsive; header with title and X icon (lucide-react: X)."
+        - listitem: "A11y: role=\"dialog\", aria-modal, labeled by title; focus management on open/close."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Create Storybook stories for DiscrepancyReportPanel (src/stories/DiscrepancyReportPanel.stories.tsx)
+      - list:
+        - listitem: "Stories: Default (open with sample items), Edge cases (many items scrolling, single item), A11y (escape to close, focus trap, labelled dialog)."
+  - heading "Page" [level=2]
+  - list:
+    - listitem:
+      - checkbox [disabled]
+      - text: Implement the prototype page assembly (src/app/page.tsx)
+      - list:
+        - listitem: "Mark component as \"use client\" and compose: UploadPanel, action buttons (Run Reconciliation, Clear), SummaryBar, FilterBar, ReconciliationTable, DiscrepancyReportPanel, and ToastContainer."
+        - listitem: "State: selected invoice/contract file names (mock), reconciled items, totals, filter, sort, panel open."
+        - listitem: "Interactions: “Use sample data” loads from src/lib/sampleData.ts and fires toast; “Run Reconciliation” calls reconcile() from src/lib/utils/shared.ts and reveals results; “View report” opens the panel; “Clear” resets state."
+        - listitem: "Layout: responsive single column on mobile, content widths constrained, sticky header actions on scroll."
+        - listitem: "A11y: proper landmark roles (main), headings structure, keyboard operability; no hidden keyboard traps."
+  - heading "Data, Types, Utilities" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Define domain types (src/lib/types.ts)
+      - list:
+        - listitem: "Types: ContractLineItem, InvoiceLineItem, ReconciledItemStatus, ReconciledItem, ReconcileTotals."
+        - listitem: Money in cents (integers), units as strings, explicit optional fields documented.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Add sample data (src/lib/sampleData.ts)
+      - list:
+        - listitem: Provide representative contract and invoice arrays (5–10 items) with mixed status outcomes (ok, rate variance, quantity overage, scope mismatch).
+        - listitem: Include two realistic subcontractors and one project reference in comments for context; ensure currency is USD.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Implement reconciliation logic + helpers (src/lib/utils/shared.ts)
+      - list:
+        - listitem: "Export reconcile(contractItems, invoiceItems) => { items: ReconciledItem[], totals: ReconcileTotals, countsByStatus }."
+        - listitem: "Matching logic: by code; compute rate variance (invoiceRate > contractRate), quantity overage (invoiceQty > contractQtyRemaining), scope (invoice code not in contract)."
+        - listitem: "Helpers: formatMoney(cents, currency), clampPercent, safeDivide for progress math."
+        - listitem: Ensure pure functions, no side effects; unit-friendly signatures.
+  - heading "Styling & Design System" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Extend Tailwind design tokens minimally (tailwind.config.ts)
+      - list:
+        - listitem: "Add brand colors: brand.blue, brand.gray, brand.emerald, brand.rose, brand.amber; keep saturation moderate; avoid purple and gradients."
+        - listitem: "Add spacing and radius tokens: radius.sm/md, spacing.xs for dense table rows."
+        - listitem: Use tokens in atoms to ensure consistent theming.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Add responsive spacing and typography scale to atoms
+      - list:
+        - listitem: Button, Badge, Table adapt to sm/md breakpoints; prevent overflow; ensure readable font sizes on mobile.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Verify dark mode styles (class-based dark:)
+      - list:
+        - listitem: Provide dark variants for Button, Badge, Table rows, and panels with sufficient contrast.
+  - heading "Storybook Quality" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Ensure all component stories use CSF3, autodocs, and controls
+      - list:
+        - listitem: Set component-level argTypes for props; document default values, a11y notes, and usage guidance.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Add at least one automated a11y check per story file
+      - list:
+        - listitem: Use the project’s existing a11y addon; include an “A11y” story per component that’s suitable for axe checks (no dynamic animations interfering).
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Add interaction tests via Storybook actions where applicable
+      - list:
+        - listitem: For Button, FilterChip, UploadPanel, DiscrepancyReportPanel open/close triggers; wire onClick/onClose to actions for visibility in the addon panel.
+  - heading "QA, Screenshots, Build" [level=2]
+  - list:
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Manual QA on the page
+      - list:
+        - listitem: "Verify flows: sample data load, reconciliation, filtering by discrepancy type, sorting by delta, report panel open/close, copy summary success toast."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Use screenshot tool to capture key UI states
+      - list:
+        - listitem: "Capture: initial page (no files), after sample data + before run, after reconciliation (with visible discrepancies), report panel open on desktop and mobile widths."
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Run project build and fix any TypeScript or build errors
+      - list:
+        - listitem: Execute npm run build; resolve any compile-time issues; ignore warnings per rules.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Update .cursor-updates summary
+      - list:
+        - listitem: Append one-sentence summary describing the new prototype page, components, stories, and utilities added.
+    - listitem:
+      - paragraph:
+        - checkbox [disabled]
+        - text: Commit changes
+      - list:
+        - listitem: "git add . && git commit -m \"feat: add invoice reconciliation prototype page with atoms/organisms, stories, and mock reconciliation logic\""

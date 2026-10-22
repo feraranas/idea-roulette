@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+# appctl — launch, check, drive and tear down Idea Roulette (Next.js) for verification.
+# Resolves its own real path, so it works via skills/, .cursor/skills/ or .claude/skills/.
+set -euo pipefail
+SELF="$(readlink -f "${BASH_SOURCE[0]}")"
+SKILL_DIR="$(cd "$(dirname "$SELF")/.." && pwd)"
+REPO="$(git -C "$SKILL_DIR" rev-parse --show-toplevel)"
+RUN_ID="${RUN_ID:-default}"
+PORT="${APP_PORT:-13300}"
+STATE="${APP_VERIFY_STATE:-/tmp/verify-idea-roulette-$RUN_ID}"
+EVIDENCE="${APP_VERIFY_EVIDENCE:-$SKILL_DIR/evidence/$RUN_ID}"
+CHROME="${CHROME_PATH:-$(command -v google-chrome || command -v chromium || true)}"
+URL="http://127.0.0.1:$PORT/"
+die(){ echo "appctl: $*" >&2; exit 1; }
+
+launch() {
+  mkdir -p "$STATE/tools"
+  if [ -f "$STATE/next.pid" ] && kill -0 "$(cat "$STATE/next.pid")" 2>/dev/null; then die "already running (pid $(cat "$STATE/next.pid"))"; fi
+  if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then die "port $PORT already in use; set APP_PORT"; fi
+  if [ ! -d "$REPO/node_modules/next" ]; then
+    # package-lock.json is out of sync with package.json, so `npm ci` fails. Install, then restore the lockfile.
+    (cd "$REPO" && npm install --no-audit --no-fund && git checkout -- package-lock.json)
+  fi
+  [ -d "$REPO/node_modules/.prisma/client" ] || (cd "$REPO" && npx prisma generate)
+  [ -d "$STATE/tools/node_modules/playwright-core" ] || (cd "$STATE/tools" && npm init -y >/dev/null && npm i --no-audit --no-fund playwright-core@1 >/dev/null)
+  sha256sum "$REPO/src/data/cache.json" > "$STATE/cache.sha256.before"
+  # Verification env: no OpenAI key (cache-only), unreachable DB, throwaway NextAuth secret, telemetry off.
+  (cd "$REPO" && setsid bash -c 'echo $$ > "$1"; exec env -u OPENAI_API_KEY -u ANTHROPIC_API_KEY -u GROQ_API_KEY -u RESEND_API_KEY \
+      NEXT_TELEMETRY_DISABLED=1 NEXTAUTH_URL="http://127.0.0.1:$2" NEXTAUTH_SECRET=verify-only-secret-not-for-production-32chars \
+      DATABASE_URL=postgresql://verify:verify@127.0.0.1:1/none DIRECT_URL=postgresql://verify:verify@127.0.0.1:1/none \
+      npx next dev --turbopack -H 127.0.0.1 -p "$2"' _ "$STATE/next.pid" "$PORT" >"$STATE/next.log" 2>&1 < /dev/null &)
+  for _ in $(seq 1 90); do
+    if curl -fs "$URL" 2>/dev/null | grep -q "Pick a Random Startup Idea"; then
+      echo "READY url=$URL pid=$(cat "$STATE/next.pid") state=$STATE"; return 0; fi
+    sleep 2
+  done
+  tail -40 "$STATE/next.log" >&2; die "next did not become ready"
+}
+
+doctor() {
+  local ok=0 pid; pid="$(cat "$STATE/next.pid" 2>/dev/null || echo none)"
+  chk(){ if eval "$2" >/dev/null 2>&1; then echo "OK   $1"; else echo "FAIL $1"; ok=1; fi; }
+  chk "next pid $pid alive (started by this run)" "kill -0 $pid"
+  chk "home page renders 'AI Task-List Creator' + spin button" "curl -fs '$URL' | grep -q 'AI Task-List Creator' && curl -fs '$URL' | grep -q 'Pick a Random Startup Idea'"
+  chk "server env has no OPENAI_API_KEY (cache-only)" "! tr '\0' '\n' < /proc/\$(pgrep -g $pid -f 'next' | tail -1)/environ | grep -q '^OPENAI_API_KEY='"
+  chk "tRPC endpoint mounted (/api/trpc)" "curl -s -o /dev/null -w '%{http_code}' '${URL}api/trpc/tasklist.ensure' | grep -qE '^(4|5)0[0-9]$'"
+  chk "chrome found ($CHROME)" "[ -x '$CHROME' ]"
+  chk "playwright-core installed" "[ -d '$STATE/tools/node_modules/playwright-core' ]"
+  echo "repo HEAD: $(git -C "$REPO" rev-parse --short HEAD)"
+  return $ok
+}
+
+journey() {
+  [ -n "${1:-}" ] || die "journeys: spin-to-tasklist"
+  local E="$EVIDENCE/$1"; mkdir -p "$E"
+  local rc=0
+  NODE_PATH="$STATE/tools/node_modules" APP_URL="$URL" CHROME_PATH="$CHROME" EVIDENCE_DIR="$E" \
+    CACHE_FILE="$REPO/src/data/cache.json" node "$SKILL_DIR/scripts/browser.mjs" "$1" || rc=$?
+  { cat "$STATE/cache.sha256.before"; sha256sum "$REPO/src/data/cache.json"; } > "$E/cache-json-sha256.txt"
+  grep -E "POST /api/trpc|GET /api/trpc|Error|error" "$STATE/next.log" > "$E/server-log-excerpt.txt" || true
+  if [ "$(awk '{print $1}' "$E/cache-json-sha256.txt" | sort -u | wc -l)" != 1 ]; then echo "FAIL src/data/cache.json changed"; rc=1; fi
+  return $rc
+}
+
+cleanup() {
+  if [ -f "$STATE/next.pid" ]; then
+    local pid; pid="$(cat "$STATE/next.pid")"
+    kill -- -"$pid" 2>/dev/null || true
+    for _ in $(seq 1 10); do pgrep -g "$pid" >/dev/null || break; sleep 0.5; done
+    pgrep -g "$pid" >/dev/null && { kill -9 -- -"$pid" 2>/dev/null || true; }
+  fi
+  if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then echo "WARN port $PORT still in use after cleanup" >&2; fi
+  case "$STATE" in /tmp/verify-idea-roulette-*) rm -rf "$STATE";; *) die "refusing to rm $STATE";; esac
+  echo "stopped our next dev, removed $STATE; evidence kept at $EVIDENCE"
+}
+
+case "${1:-}" in
+  launch) launch;; doctor) doctor;; cleanup) cleanup;;
+  journey) journey "${2:-}";;
+  *) echo "usage: appctl launch|doctor|journey spin-to-tasklist|cleanup  (env RUN_ID, APP_PORT)"; exit 2;;
+esac
