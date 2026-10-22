@@ -1,0 +1,8 @@
+- main:
+  - heading "AI Task-List Creator" [level=1]
+  - paragraph: Spin for a random startup idea, generate an atomic design task list, and copy it for your next build session.
+  - button "Create AI Agent Tasklist"
+  - button "Pick another idea"
+  - heading "Subcontractor Invoice Reconciliation Tool" [level=1]
+  - paragraph: Upload subcontractor invoices and original contracts to automatically flag discrepancies in rates, quantities, and scope changes. Generates summary reports showing approved vs. billed amounts, helping general contractors catch billing errors that typically cost 3-8% of project value when missed.
+  - button "View one pager"

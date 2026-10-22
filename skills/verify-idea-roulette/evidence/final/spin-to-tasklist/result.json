@@ -1,0 +1,42 @@
+{
+  "journey": "spin-to-tasklist",
+  "url": "http://127.0.0.1:13300/",
+  "steps": [
+    {
+      "step": "spin",
+      "spinMs": 3489,
+      "chosenTitle": "Subcontractor Invoice Reconciliation Tool"
+    },
+    {
+      "step": "one-pager-expanded",
+      "ok": true
+    },
+    {
+      "step": "tasklist",
+      "panelChars": 11697,
+      "cacheHasTitle": true,
+      "firstCachedLine": "Prototype overview",
+      "panelContainsFirstCachedLine": true
+    },
+    {
+      "step": "copy",
+      "clipboardEqualsCache": true,
+      "clipboardChars": 12158
+    }
+  ],
+  "trpc": [
+    {
+      "url": "/api/trpc/tasklist.ensure?batch=1",
+      "status": 200
+    },
+    {
+      "url": "/api/trpc/tasklist.generate?batch=1",
+      "status": 200
+    }
+  ],
+  "externalRequests": [
+    "https://fonts.googleapis.com/css2?family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Geist:wght@100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+  ],
+  "consoleErrors": [],
+  "pass": true
+}
