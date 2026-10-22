@@ -8,28 +8,30 @@ const CACHE_FILE = path.join(process.cwd(), "src", "data", "cache.json");
 
 // Simple in-process mutex to serialize cache writes
 let cacheLock: Promise<void> = Promise.resolve();
-async function withCacheLock<T>(fn: () => Promise<T>): Promise<T> {
-  const previous = cacheLock;
-  let release: () => void;
-  cacheLock = new Promise<void>((res) => {
-    release = res;
-  });
-  await previous;
-  try {
-    return await fn();
-  } finally {
-    // @ts-expect-error release is assigned above
-    release();
+function withCacheLock<T>(fn: () => Promise<T>): Promise<T> {
+  const run = cacheLock.then(fn);
+  cacheLock = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  return run;
+}
+
+function parseCache(data: unknown): Record<string, string> {
+  if (!data || typeof data !== "object" || Array.isArray(data)) {
+    return {};
   }
+  return Object.fromEntries(
+    Object.entries(data).filter(
+      (entry): entry is [string, string] => typeof entry[1] === "string",
+    ),
+  );
 }
 
 export async function readCache(): Promise<Record<string, string>> {
   try {
     const raw = await readFile(CACHE_FILE, "utf8");
-    const data = JSON.parse(raw);
-    return data && typeof data === "object"
-      ? (data as Record<string, string>)
-      : {};
+    return parseCache(JSON.parse(raw));
   } catch {
     return {};
   }
