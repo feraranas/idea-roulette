@@ -1,7 +1,5 @@
 import { z } from "zod";
 
-import { buildPrompt } from "@/lib/ai/prompt";
-import { getOpenAI } from "@/lib/ai/openai";
 import { publicProcedure, createTRPCRouter } from "../trpc";
 import { TRPCError } from "@trpc/server";
 import { ensureTasklistCached, generateTasklistWithCache } from "@/lib/cache";

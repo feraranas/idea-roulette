@@ -48,15 +48,15 @@ export function cacheKeyFromInput(
   return input.title.trim().toLowerCase();
 }
 
-export async function ensureTasklistCached(
-  input: BuildPromptInput,
-): Promise<{ cached: boolean }> {
-  const key = cacheKeyFromInput(input);
-  const cache = await readCache();
-  if (cache[key] && typeof cache[key] === "string" && cache[key].trim()) {
-    return { cached: true } as const;
-  }
+function cachedValue(cache: Record<string, string>, key: string): string | null {
+  const value = cache[key];
+  return value && typeof value === "string" && value.trim() ? value : null;
+}
 
+async function generateAndStore(
+  input: BuildPromptInput,
+  key: string,
+): Promise<string> {
   const openai = getOpenAI();
   const prompt = buildPrompt(input);
 
@@ -83,56 +83,23 @@ export async function ensureTasklistCached(
     }
   });
 
-  return { cached: false } as const;
+  return markdown;
 }
 
-export async function getCachedTasklist(
+export async function ensureTasklistCached(
   input: BuildPromptInput,
-): Promise<string | null> {
+): Promise<{ cached: boolean }> {
   const key = cacheKeyFromInput(input);
-  const cache = await readCache();
-  const value = cache[key];
-  return value && typeof value === "string" && value.trim() ? value : null;
+  if (cachedValue(await readCache(), key)) {
+    return { cached: true } as const;
+  }
+  await generateAndStore(input, key);
+  return { cached: false } as const;
 }
 
 export async function generateTasklistWithCache(
   input: BuildPromptInput,
 ): Promise<string> {
   const key = cacheKeyFromInput(input);
-  const cache = await readCache();
-  const cachedMarkdown = cache[key];
-  if (
-    cachedMarkdown &&
-    typeof cachedMarkdown === "string" &&
-    cachedMarkdown.trim()
-  ) {
-    return cachedMarkdown;
-  }
-
-  const openai = getOpenAI();
-  const prompt = buildPrompt(input);
-
-  const completion = await openai.chat.completions.create({
-    model: process.env.OPENAI_MODEL ?? "gpt-5",
-    messages: [
-      { role: "system", content: prompt.system },
-      { role: "user", content: prompt.user },
-    ],
-  });
-
-  const markdown = completion.choices?.[0]?.message?.content ?? "";
-
-  if (!markdown.trim()) {
-    throw new Error("OpenAI returned an empty response");
-  }
-
-  await withCacheLock(async () => {
-    const latest = await readCache();
-    if (!latest[key] || !latest[key].trim()) {
-      latest[key] = markdown;
-      await writeCache(latest);
-    }
-  });
-
-  return markdown;
+  return cachedValue(await readCache(), key) ?? generateAndStore(input, key);
 }
