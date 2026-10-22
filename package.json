@@ -13,7 +13,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "warm-cache": "tsx scripts/warm-cache.ts",
-    "check-cache": "tsx scripts/check-cache.ts"
+    "warm-cache": "tsx scripts/warm-cache.ts",
+    "check-cache": "tsx scripts/check-cache.ts",
+    "test": "node --import tsx --test tests/cache.test.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.709.0",
