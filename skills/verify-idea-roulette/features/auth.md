@@ -15,10 +15,11 @@ NextAuth email (magic-link) sign-in pages: `/auth/signin`, `/auth/verify`, `/aut
 
 Preconditions:
 
-- Postgres with the Prisma schema applied, and a local SMTP sink (for example MailHog) in `EMAIL_SERVER_*`. appctl provides neither.
+- Page render: baseline only.
+- Magic link: Postgres with the Prisma schema applied, and a local SMTP sink (for example MailHog) in `EMAIL_SERVER_*`. appctl provides neither, so `auth-magic-link` is unverified.
 
-- **Page only.** Open `${URL}auth/signin` and snapshot it. Not yet scripted.
+- **Page only.** `appctl journey panel-actions` step 6: `/auth/signin` renders heading `Welcome` and the `Email address` field (`13-signin.png`, `checks.signinPage`). It works with appctl's unreachable `DATABASE_URL`. The form is not submitted.
 
 ## Gotchas
 
-- Not proved. Never point `EMAIL_SERVER_*` / `RESEND_API_KEY` at a real provider during verification: it sends real email.
+- Sending is not proved. Never point `EMAIL_SERVER_*` / `RESEND_API_KEY` at a real provider during verification: it sends real email.

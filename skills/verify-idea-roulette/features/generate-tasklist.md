@@ -19,10 +19,11 @@ Preconditions:
 - Baseline; the chosen idea is in `cache.json` (all 20 are).
 
 - **Generate (cached).** Journey step 4. Observed in `evidence/final`: `tasklist.generate` → 200, `panelContainsFirstCachedLine: true` (`Prototype overview`), about 11.7k chars rendered, `cache.json` sha256 unchanged.
-- **Error path.** Make one idea uncached in a scratch copy only, never by editing the committed `cache.json`. With no key, generate must show `Something went wrong`. Not yet scripted.
+- **Error path.** `appctl journey panel-actions` step 5: the browser rewrites the `tasklist.generate` body to the uncached title `Verify Uncached Idea Do Not Generate`. The keyless server answers 500 (`OpenAI API key is not configured...` in the console) and card `Something went wrong` appears. `Retry generation` sends one more generate (still 500). `Pick new idea` returns to idle. `cache.json` sha256 is unchanged. Never edit the committed `cache.json` to force this.
 
 ## Gotchas
 
+- Product gap (reported, not fixed here): in the error state the primary button reads `Pick a Random Startup Idea`, but clicking it re-runs generate (`src/app/page.tsx`: `onClick={state === "idle" ? handleSpin : handleGenerate}`, and the label falls through to the idle text). `result.json` records `primaryLabelInError` and `primaryClickInErrorRanGenerate: true`.
 - `gen-live` is unverified: it is a paid OpenAI call and writes `src/data/cache.json` in the repo.
 - `cache.json` path is `process.cwd()/src/data/cache.json`; run `next dev` from the repo root.
 - The cache key is the lower-cased title; a renamed idea loses its cache entry.
