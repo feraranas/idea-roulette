@@ -18,11 +18,11 @@ Preconditions:
 
 - Baseline.
 
-- **Spin.** `appctl journey spin-to-tasklist` steps 1–2. `result.json` `spin.spinMs` ≈ 3500 and `chosenTitle` is one of `ideas.json` titles; `02-spinning.png` shows the slot list.
+- **Spin.** `appctl journey spin-to-tasklist` steps 1–2. `result.json` `spin.spinMs` ≈ 3000–3600 (3083 and 3528 ms observed on 2026-10-26) and `chosenTitle` is one of `ideas.json` titles; `02-spinning.png` shows the slot list.
+- **Reduced motion.** `appctl journey panel-actions` step 4: `reduced-motion-spin.spinMs` under 2000 (886 and 1356 ms observed, including click and wait overhead).
 - **Prefetch.** `result.json` `trpc` includes `/api/trpc/tasklist.ensure?batch=1` → 200.
 
 ## Gotchas
 
 - The idea is random. Assert membership in `ideas.json`, not a specific title.
 - `agent-helpers/uat.md` says 5–10 s with 6.5 s default; the page passes 3000 ms. Report the observed time.
-- The reduced-motion path is mapped but not proved (use `browser.newContext({ reducedMotion: "reduce" })`).

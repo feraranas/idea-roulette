@@ -18,7 +18,8 @@ Preconditions:
 - A chosen idea (after `spin`).
 
 - **Expand.** Journey step 3: click `View one pager`, then button `Hide one pager` appears; `04-tasklist-ready.aria.txt` shows the one-pager paragraphs.
+- **Collapse.** `appctl journey panel-actions` step 1: click `Hide one pager`, then `View one pager` returns with `aria-expanded=false` (`checks.onePagerCollapse`).
 
 ## Gotchas
 
-- Collapse back (`Hide one pager`) is not asserted yet.
+- The title `h1` is the second `h1` on the page; the page header is the first.

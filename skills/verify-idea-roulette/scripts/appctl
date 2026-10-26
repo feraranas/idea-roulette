@@ -18,7 +18,7 @@ launch() {
   if [ -f "$STATE/next.pid" ] && kill -0 "$(cat "$STATE/next.pid")" 2>/dev/null; then die "already running (pid $(cat "$STATE/next.pid"))"; fi
   if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then die "port $PORT already in use; set APP_PORT"; fi
   if [ ! -d "$REPO/node_modules/next" ]; then
-    # package-lock.json is out of sync with package.json, so `npm ci` fails. Install, then restore the lockfile.
+    # Install, then restore the lockfile in case npm rewrote it (npm ci also works since the lockfile sync).
     (cd "$REPO" && npm install --no-audit --no-fund && git checkout -- package-lock.json)
   fi
   [ -d "$REPO/node_modules/.prisma/client" ] || (cd "$REPO" && npx prisma generate)
@@ -28,7 +28,9 @@ launch() {
   (cd "$REPO" && setsid bash -c 'echo $$ > "$1"; exec env -u OPENAI_API_KEY -u ANTHROPIC_API_KEY -u GROQ_API_KEY -u RESEND_API_KEY \
       NEXT_TELEMETRY_DISABLED=1 NEXTAUTH_URL="http://127.0.0.1:$2" NEXTAUTH_SECRET=verify-only-secret-not-for-production-32chars \
       DATABASE_URL=postgresql://verify:verify@127.0.0.1:1/none DIRECT_URL=postgresql://verify:verify@127.0.0.1:1/none \
-      npx next dev --turbopack -H 127.0.0.1 -p "$2"' _ "$STATE/next.pid" "$PORT" >"$STATE/next.log" 2>&1 < /dev/null &)
+      npx next dev --turbopack -H 127.0.0.1 -p "$2"' _ "$STATE/next.pid" "$PORT" >"$STATE/next.log" 2>&1 < /dev/null &) >/dev/null 2>&1
+  # ^ the outer redirect matters: the forked `cd && setsid` subshell waits on setsid for the server's lifetime,
+  #   and without it it would hold appctl's stdout open, hanging `appctl launch | tail` until cleanup.
   for _ in $(seq 1 90); do
     if curl -fs "$URL" 2>/dev/null | grep -q "Pick a Random Startup Idea"; then
       echo "READY url=$URL pid=$(cat "$STATE/next.pid") state=$STATE"; return 0; fi
@@ -51,7 +53,7 @@ doctor() {
 }
 
 journey() {
-  [ -n "${1:-}" ] || die "journeys: spin-to-tasklist"
+  [ -n "${1:-}" ] || die "journeys: spin-to-tasklist | panel-actions"
   local E="$EVIDENCE/$1"; mkdir -p "$E"
   local rc=0
   NODE_PATH="$STATE/tools/node_modules" APP_URL="$URL" CHROME_PATH="$CHROME" EVIDENCE_DIR="$E" \
@@ -77,5 +79,5 @@ cleanup() {
 case "${1:-}" in
   launch) launch;; doctor) doctor;; cleanup) cleanup;;
   journey) journey "${2:-}";;
-  *) echo "usage: appctl launch|doctor|journey spin-to-tasklist|cleanup  (env RUN_ID, APP_PORT)"; exit 2;;
+  *) echo "usage: appctl launch|doctor|journey spin-to-tasklist|panel-actions|cleanup  (env RUN_ID, APP_PORT)"; exit 2;;
 esac

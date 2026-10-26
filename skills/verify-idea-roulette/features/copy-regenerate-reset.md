@@ -19,8 +19,8 @@ Preconditions:
 - Task list ready (after `generate-tasklist`).
 
 - **Copy.** Journey step 5: click `Copy`; `result.json` `clipboardEqualsCache: true`. Observed with 12,158 chars for `Subcontractor Invoice Reconciliation Tool`.
-- **Reset.** Click `Pick another idea`; heading `AI Task-List Creator` and button `Pick a Random Startup Idea` return. Not yet scripted.
-- **Regenerate.** Click `Regenerate`; a second `tasklist.generate` 200 with identical panel text. Not yet scripted.
+- **Regenerate.** `appctl journey panel-actions` step 2: `Regenerate`, then `Generate again`, each one more `tasklist.generate` 200 with identical panel text (`checks.regenerate`, `checks.generateAgain`).
+- **Reset.** `appctl journey panel-actions` step 3: `Pick another idea` brings back `Pick a Random Startup Idea` with no task list (`checks.reset`). The link also shows on the error card screen.
 
 ## Gotchas
 

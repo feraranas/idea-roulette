@@ -5,7 +5,7 @@ This directory is the maintained source for verifying what a user can do on Idea
 ## Baseline preconditions
 
 - `appctl launch` printed `READY`, `appctl doctor` all `OK` (no OpenAI key in the server env).
-- `src/data/cache.json` contains all 20 idea titles (lower-cased keys).
+- `src/data/cache.json` contains all 20 idea titles (lower-cased keys): `npm run check-cache` prints `20/20 ideas cached, 0 orphan key(s)`.
 - Fresh page load at `/`.
 
 ## Driving conventions
